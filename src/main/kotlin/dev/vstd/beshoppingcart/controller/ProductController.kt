@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.logging.Logger
 
 @RestController
-@RequestMapping("/cloth")
+@RequestMapping("/product")
 class ProductController(private val productService: ProductService) {
     private val logger = Logger.getLogger(ProductController::class.java.name)
 

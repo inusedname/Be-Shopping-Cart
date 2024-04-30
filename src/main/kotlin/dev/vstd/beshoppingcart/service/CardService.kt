@@ -21,6 +21,11 @@ class CardService(private val cardRepository: CardRepository) {
         )
     }
 
+    fun changeBalance(cardEntity: CardEntity, amount: Long) {
+        cardEntity.balance = amount
+        cardRepository.save(cardEntity)
+    }
+
     fun findCardByUserId(userId: Long): CardEntity? {
         return cardRepository.findFirstByUserId(userId)
     }

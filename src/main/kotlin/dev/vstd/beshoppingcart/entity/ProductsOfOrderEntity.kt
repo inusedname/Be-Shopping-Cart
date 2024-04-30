@@ -1,5 +1,6 @@
 package dev.vstd.beshoppingcart.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
 @Entity
@@ -13,7 +14,8 @@ class ProductsOfOrderEntity(
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    var orderEntity: OrderEntity? = null,
+    @JsonIgnore
+    var orderEntity: OrderEntity,
 
     val quantity: Int,
 

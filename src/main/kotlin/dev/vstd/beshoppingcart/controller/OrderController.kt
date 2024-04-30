@@ -1,7 +1,7 @@
 package dev.vstd.beshoppingcart.controller
 
 import dev.vstd.beshoppingcart.dto.CreateOrderBodyDto
-import dev.vstd.beshoppingcart.entity.OrderEntity
+import dev.vstd.beshoppingcart.dto.OrderRespDto
 import dev.vstd.beshoppingcart.service.OrderService
 import dev.vstd.beshoppingcart.service.UserService
 import org.springframework.http.ResponseEntity
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.sql.Date
-import java.time.LocalDate
 
 @RestController
 @RequestMapping("/order")
@@ -21,7 +19,7 @@ class OrderController(
     private val userService: UserService
 ) {
     @GetMapping("/all")
-    fun allOrders(): ResponseEntity<*> {
+    fun allOrders(): ResponseEntity<List<OrderRespDto>> {
         return ResponseEntity.ok(orderService.findAll())
     }
 
@@ -32,9 +30,10 @@ class OrderController(
             return ResponseEntity.badRequest().body("User not found")
         }
         return try {
-            val saved = orderService.createOrder(user, body)
-            ResponseEntity.ok(saved)
-        } catch (e: Exception) {
+            val id = orderService.createOrder(user, body)
+            val order = orderService.findByOrderId(id)
+            ResponseEntity.ok(order)
+        } catch (e: java.lang.Exception) {
             ResponseEntity.badRequest().body(e.message)
         }
     }
