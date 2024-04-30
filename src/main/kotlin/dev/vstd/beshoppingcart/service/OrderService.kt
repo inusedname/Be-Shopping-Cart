@@ -1,5 +1,6 @@
 package dev.vstd.beshoppingcart.service
 
+import dev.vstd.beshoppingcart.dto.CreateOrderBodyDto
 import dev.vstd.beshoppingcart.entity.UserEntity
 import dev.vstd.beshoppingcart.entity.OrderEntity
 import dev.vstd.beshoppingcart.entity.ProductsOfOrderEntity
@@ -13,6 +14,7 @@ import java.time.LocalDate
 class OrderService(
     private val orderRepository: OrderRepository,
     private val productsOfOrderRepository: ProductsOfOrderRepository,
+    private val productService: ProductService
 ) {
     fun findAll(): List<OrderEntity> {
         return orderRepository.findAll()
@@ -24,20 +26,32 @@ class OrderService(
 
     fun createOrder(
         user: UserEntity,
-        date: LocalDate,
-        clothes: List<ProductsOfOrderEntity>
+        body: CreateOrderBodyDto,
     ): OrderEntity {
         // Create order
-        val tmpEntity = OrderEntity(
+        val allProducts = productService.getAllClothes()
+        val newOrder = OrderEntity(
             user = user,
-            date = Date.valueOf(date),
+            date = Date.valueOf(LocalDate.now()),
+            shippingAddress = body.shipment.toString(),
+            purchaseMethod = body.purchaseMethod,
+            purchaseMethodId = body.purchaseMethodId
         )
-        val savedEntity = orderRepository.save(tmpEntity)
-        clothes.forEach {
-            it.orderEntity = savedEntity
+        val savedOrder = orderRepository.save(newOrder)
+        val newProducts = body.products.map { dto ->
+            val product = allProducts.find { it.id == dto.productId }
+            if (product == null) {
+                throw IllegalArgumentException("Product with id ${dto.productId} not found")
+            }
+            ProductsOfOrderEntity(
+                productEntity = product,
+                orderEntity = savedOrder,
+                quantity = dto.quantity,
+                snapshotPrice = product.price
+            )
         }
-        productsOfOrderRepository.saveAll(clothes)
+        productsOfOrderRepository.saveAll(newProducts)
 
-        return savedEntity
+        return savedOrder
     }
 }
