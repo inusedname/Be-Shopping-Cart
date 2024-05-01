@@ -19,8 +19,8 @@ class OrderController(
     private val userService: UserService
 ) {
     @GetMapping("/all")
-    fun allOrders(): ResponseEntity<List<OrderRespDto>> {
-        return ResponseEntity.ok(orderService.findAll())
+    fun allOrders(@RequestParam userId: Long): ResponseEntity<List<OrderRespDto>> {
+        return ResponseEntity.ok(orderService.findAll(userId))
     }
 
     @PostMapping("/create")

@@ -18,8 +18,8 @@ class OrderService(
     private val productService: ProductService,
     private val cardService: CardService
 ) {
-    fun findAll(): List<OrderRespDto> {
-        return orderRepository.findAll().map { OrderRespDto.fromOrderEntity(it) }
+    fun findAll(userId: Long): List<OrderRespDto> {
+        return orderRepository.findAllByUserId(userId).map { OrderRespDto.fromOrderEntity(it) }
     }
 
     fun findByOrderId(orderId: Long): OrderEntity {
