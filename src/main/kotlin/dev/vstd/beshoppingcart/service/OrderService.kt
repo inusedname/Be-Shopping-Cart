@@ -22,8 +22,31 @@ class OrderService(
         return orderRepository.findAllByUserId(userId).map { OrderRespDto.fromOrderEntity(it) }
     }
 
+    fun findAll(): List<OrderRespDto> {
+        return orderRepository.findAll().map { OrderRespDto.fromOrderEntity(it) }
+    }
+
     fun findByOrderId(orderId: Long): OrderEntity {
         return orderRepository.findById(orderId).get()
+    }
+
+    @Transactional
+    fun updateStatus(
+        orderId: Long,
+        status: String,
+    ) {
+        val order = orderRepository.findById(orderId).get()
+        if (order == null) {
+            throw IllegalArgumentException("Order with id $orderId not found")
+        }
+        when (status) {
+            OrderEntity.Status.PENDING.name -> order.status = OrderEntity.Status.PENDING
+            OrderEntity.Status.SHIPPED.name -> order.status = OrderEntity.Status.SHIPPED
+            OrderEntity.Status.DELIVERED.name -> order.status = OrderEntity.Status.DELIVERED
+            OrderEntity.Status.CANCELLED.name -> order.status = OrderEntity.Status.CANCELLED
+            else -> throw IllegalArgumentException("Invalid status: $status")
+        }
+        orderRepository.save(order)
     }
 
     @Transactional

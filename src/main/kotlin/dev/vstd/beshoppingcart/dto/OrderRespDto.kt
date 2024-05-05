@@ -10,6 +10,7 @@ data class OrderRespDto(
     val date: LocalDateTime,
     val shippingAddress: String,
     val status: OrderEntity.Status,
+    val purchaseMethod: OrderEntity.PurchaseMethod?,
     val purchaseMethodId: Long?,
     val products: List<ProductsOfOrderEntity>
 ) {
@@ -22,6 +23,7 @@ data class OrderRespDto(
                     date = date,
                     shippingAddress = shippingAddress,
                     status = status,
+                    purchaseMethod = purchaseMethod,
                     purchaseMethodId = purchaseMethodId,
                     products = products!!
                 )

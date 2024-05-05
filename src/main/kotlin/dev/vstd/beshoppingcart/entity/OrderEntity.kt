@@ -15,7 +15,7 @@ class OrderEntity(
     val shippingAddress: String,
     @Enumerated(EnumType.STRING)
     val purchaseMethod: PurchaseMethod,
-    val status: Status = Status.PENDING,
+    var status: Status = Status.PENDING,
     val purchaseMethodId: Long?,
     @OneToMany(mappedBy = "orderEntity")
     val products: List<ProductsOfOrderEntity>? = null,
