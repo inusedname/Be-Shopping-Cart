@@ -37,4 +37,20 @@ class OrderController(
             ResponseEntity.badRequest().body(e.message)
         }
     }
+
+    @PostMapping("/pay")
+    fun payByCard(@RequestParam userId: Long, @RequestParam orderId: Long, @RequestParam cvv: String): ResponseEntity<*> {
+        val user = userService.findUserById(userId) ?: return ResponseEntity.badRequest().body("User not found")
+        val order = orderService.findByOrderId(orderId) ?: return ResponseEntity.badRequest().body("Order not found")
+        val card = user.card ?: return ResponseEntity.badRequest().body("User has no card")
+        if (card.cvv != cvv) {
+            return ResponseEntity.badRequest().body("Invalid CVV")
+        }
+        return try {
+            orderService.payOrder(order, card)
+            ResponseEntity.ok("Success")
+        } catch (e: java.lang.Exception) {
+            ResponseEntity.badRequest().body(e.message)
+        }
+    }
 }

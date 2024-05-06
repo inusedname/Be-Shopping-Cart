@@ -61,23 +61,4 @@ class UserController(private val userService: UserService, private val cardServi
             }
         }
     }
-
-    @PostMapping("validate-cvv")
-    fun validateCvv(@RequestParam userId: Long, @RequestParam cvv: String): ResponseEntity<*> {
-        val user = userService.findUserById(userId)
-        return if (user == null) {
-            ResponseEntity.badRequest().body("No account has this id")
-        } else {
-            val card = cardService.findCardByUserId(userId)
-            if (card == null) {
-                return ResponseEntity.badRequest().body("This account has no card")
-            } else {
-                return if (card.cvv == cvv) {
-                    ResponseEntity.ok("CVV is correct")
-                } else {
-                    ResponseEntity.badRequest().body("CVV is incorrect")
-                }
-            }
-        }
-    }
 }
