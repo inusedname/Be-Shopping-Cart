@@ -1,0 +1,5 @@
+INSERT INTO be_shopping_cart.order_entity (id, date, purchase_method, purchase_method_id, shipping_address, status, user_id) VALUES (13, '2024-04-30 21:57:17.052686', 'COD', null, 'Ha Dong', 0, 5);
+INSERT INTO be_shopping_cart.order_entity (id, date, purchase_method, purchase_method_id, shipping_address, status, user_id) VALUES (14, '2024-05-07 00:31:00.328809', 'CARD', 1, 'Ha Dong', 1, 5);
+INSERT INTO be_shopping_cart.order_entity (id, date, purchase_method, purchase_method_id, shipping_address, status, user_id) VALUES (15, '2024-05-07 00:34:28.489274', 'CARD', 1, 'Ha Dong', 0, 5);
+INSERT INTO be_shopping_cart.order_entity (id, date, purchase_method, purchase_method_id, shipping_address, status, user_id) VALUES (18, '2024-05-07 11:40:23.000000', 'COD', null, 'Thành phố Hà Nội, Quận Hà Đông, Phuong Kien Hung', 0, 6);
+INSERT INTO be_shopping_cart.order_entity (id, date, purchase_method, purchase_method_id, shipping_address, status, user_id) VALUES (19, '2024-05-07 11:40:56.000000', 'CARD', null, 'Thành phố Hà Nội, Quận Hà Đông, Phuong Kien Hung', 1, 6);
