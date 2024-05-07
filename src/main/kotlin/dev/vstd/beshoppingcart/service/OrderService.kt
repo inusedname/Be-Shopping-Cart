@@ -91,7 +91,7 @@ class OrderService(
             if (card.balance < totalPrice) {
                 throw IllegalArgumentException("Not enough balance")
             }
-            cardService.changeBalance(card, card.balance - totalPrice)
+            cardService.chargeCard(card, totalPrice, "Order#{order.id} payment")
             this.updateStatus(order.id, OrderEntity.Status.SHIPPED.name)
         }
     }

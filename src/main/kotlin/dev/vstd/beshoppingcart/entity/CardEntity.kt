@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 
 @Schema(description = "Card")
@@ -21,4 +22,8 @@ class CardEntity(
     val expirationDate: String,
     val cvv: String,
     var balance: Long,
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cardEntity")
+    val transactions: List<CardTransactionEntity>? = null
 )

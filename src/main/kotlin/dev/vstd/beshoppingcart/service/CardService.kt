@@ -1,13 +1,20 @@
 package dev.vstd.beshoppingcart.service
 
 import dev.vstd.beshoppingcart.entity.CardEntity
+import dev.vstd.beshoppingcart.entity.CardTransactionEntity
 import dev.vstd.beshoppingcart.entity.UserEntity
 import dev.vstd.beshoppingcart.repository.CardRepository
+import dev.vstd.beshoppingcart.repository.CardTransactionRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import kotlin.random.Random
 
 @Service
-class CardService(private val cardRepository: CardRepository) {
+class CardService(
+    private val cardRepository: CardRepository,
+    private val cardTransactionRepository: CardTransactionRepository
+) {
 
     fun createCard(userEntity: UserEntity): CardEntity {
         return cardRepository.save(
@@ -21,8 +28,31 @@ class CardService(private val cardRepository: CardRepository) {
         )
     }
 
-    fun changeBalance(cardEntity: CardEntity, amount: Long) {
-        cardEntity.balance = amount
+    @Transactional
+    fun chargeCard(cardEntity: CardEntity, amount: Long, message: String) {
+        cardTransactionRepository.save(
+            CardTransactionEntity(
+                cardEntity = cardEntity,
+                amount = amount,
+                description = message,
+                date = LocalDateTime.now()
+            )
+        )
+        cardEntity.balance -= amount
+        cardRepository.save(cardEntity)
+    }
+
+    @Transactional
+    fun topUpCard(cardEntity: CardEntity, amount: Long, message: String) {
+        cardTransactionRepository.save(
+            CardTransactionEntity(
+                cardEntity = cardEntity,
+                amount = amount,
+                description = message,
+                date = LocalDateTime.now()
+            )
+        )
+        cardEntity.balance += amount
         cardRepository.save(cardEntity)
     }
 
